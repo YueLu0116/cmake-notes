@@ -35,17 +35,25 @@ CMake中有作用域的概念，PRIVATE, INTERFACE, and PUBLIC。例如，动态
 ### 包含头文件
 通过`target_include_directories`来指定包含的头文件，基本调用格式为
 ```
-target_include_directories(target SCOPE include_directory)
+target_include_directories(<target> SCOPE <include_directory>)
 ```
 其中，target为execuable or library，SCOPE为上点所述关键字，include_directory为包含头文件的路径。[官方文档](https://cmake.org/cmake/help/latest/command/target_include_directories.html)
 
 ## Lesson 3 静态链接库
 ### 建立一个静态链接库
-通过`add_library(lib_name, SOURCE_CODE_FILE)`可以添加一个静态链接库，通过`target_include_directories(libname, SCOPE, INCLUDE_FILES)`为该静态链接库指定包含的头文件。和添加可执行文件有相同的模式，即先add library，将源文件与target联系在一起，再指定包含目录。  
+通过`add_library(<lib_name> STATIC <SOURCE_CODE_FILE>)`可以添加一个静态链接库，通过`target_include_directories(<lib_name> <SCOPE> <INCLUDE_FILES>)`为该静态链接库指定包含的头文件。和添加可执行文件有相同的模式，即先add library，将源文件与target联系在一起，再指定包含目录。  
 
 ### 链接到一个静态链接库
-通过`target_link_libraries(exe_name scope lib_name)`实现。  
+通过`target_link_libraries(<exe_name> <SCOPE> <lib_name>)`实现。  
 关于scope参考Lesson 2。
+
+## Lesson 4 动态链接库
+### 建立一个动态链接库
+同Lesson 3，唯一的变化是把`add_library(<lib_name> STATIC <SOURCE_CODE_FILE>)`中的STATIC变为SHARED
+
+### 为target起别名
+`add_library(<name> ALIAS <target>)`  
+参考[文档](https://cmake.org/cmake/help/latest/command/add_library.html#alias-libraries)：The <name> may not be used to modify properties of <target>, that is, it may not be used as the operand of set_property(), set_target_properties(), target_link_libraries() etc. An ALIAS target may not be installed or exported.
 
 ## FAQ
 1. [Are CMAKE_SOURCE_DIR and PROJECT_SOURCE_DIR the same in CMake?
