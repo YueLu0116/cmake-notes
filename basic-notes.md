@@ -58,4 +58,15 @@ target_include_directories(<target> SCOPE <include_directory>)
 ## FAQ
 1. [Are CMAKE_SOURCE_DIR and PROJECT_SOURCE_DIR the same in CMake?
 ](https://stackoverflow.com/questions/32028667/are-cmake-source-dir-and-project-source-dir-the-same-in-cmake)
-   >  CMAKE_SOURCE_DIR does indeed refer to the folder where the top-level CMakeLists.txt is defined. However, PROJECT_SOURCE_DIR refers to the folder of the CMakeLists.txt containing the most recent project() command.
+   >  CMAKE_SOURCE_DIR does indeed refer to the folder where the top-level CMakeLists.txt is defined. However, PROJECT_SOURCE_DIR refers to the folder of the CMakeLists.txt containing the most recent project() command.  
+
+2. [How to enable c++17 in cmake](https://stackoverflow.com/questions/45688522/how-to-enable-c17-in-cmake)  
+   Use `target_compile_features(${TARGET_NAME} PRIVATE cxx_std_17)`. More information is in the [official document](https://cmake.org/cmake/help/latest/manual/cmake-compile-features.7.html#id5)  
+
+3. How to use cmakw tools in vscode?  
+   On mac  
+   1. Open the Command Palette and run cmake:configure;
+   2. Select the complier (clang);
+   3. Build.  
+   
+   More information is in the [official document](https://code.visualstudio.com/docs/cpp/cmake-linux).
