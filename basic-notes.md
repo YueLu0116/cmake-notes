@@ -55,10 +55,60 @@ target_include_directories(<target> SCOPE <include_directory>)
 `add_library(<name> ALIAS <target>)`  
 参考[文档](https://cmake.org/cmake/help/latest/command/add_library.html#alias-libraries)：The <name> may not be used to modify properties of <target>, that is, it may not be used as the operand of set_property(), set_target_properties(), target_link_libraries() etc. An ALIAS target may not be installed or exported.
 
+## Lesson 5 install
+
+### install的用处是什么
+
+Cmake 里的install实现make install功能，例如当自己写了一个库，需要将库文件和头文件之类的放到相应的目录下。可参考[论坛](https://www.reddit.com/r/cpp/comments/6m7sp6/cmake_and_c_whats_the_deal_with_installing/)以及[文章](https://zhuanlan.zhihu.com/p/52898952)
+
+### 安装路径
+
+默认是`/usr/local`下，也可以通过`cmake .. -DCMAKE_INSTALL_PREFIX=/install/location`来指定。如果想先安装到一个临时目录下，查看安装内容是否齐全
+
+### 不同类型的安装
+
+分为binaries, libraries, files, and directories。示例：
+
+```
+# Binaries
+install (TARGETS cmake_examples_inst_bin
+    DESTINATION bin)
+
+# Library
+# Note: may not work on windows
+install (TARGETS cmake_examples_inst
+    LIBRARY DESTINATION lib)
+
+# Header files
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ 
+    DESTINATION include)
+
+# Config
+install (FILES cmake-examples.conf
+    DESTINATION etc)
+```
+
+### build步骤
+
+```
+mkdir build
+cd build
+cmake ..
+make
+make install
+```
+
+会生成一个install_manifest.txt文件，里面记录了install的地址。
+
+如果想预先安装到一个临时文件，检查安装内容是否齐全，则可以
+
+`make install DESTDIR=/tmp/stage`
+
 ## FAQ
 1. [Are CMAKE_SOURCE_DIR and PROJECT_SOURCE_DIR the same in CMake?
-](https://stackoverflow.com/questions/32028667/are-cmake-source-dir-and-project-source-dir-the-same-in-cmake)
-   >  CMAKE_SOURCE_DIR does indeed refer to the folder where the top-level CMakeLists.txt is defined. However, PROJECT_SOURCE_DIR refers to the folder of the CMakeLists.txt containing the most recent project() command.  
+  ](https://stackoverflow.com/questions/32028667/are-cmake-source-dir-and-project-source-dir-the-same-in-cmake)
+
+  >  CMAKE_SOURCE_DIR does indeed refer to the folder where the top-level CMakeLists.txt is defined. However, PROJECT_SOURCE_DIR refers to the folder of the CMakeLists.txt containing the most recent project() command.  
 
 2. [How to enable c++17 in cmake](https://stackoverflow.com/questions/45688522/how-to-enable-c17-in-cmake)  
    Use `target_compile_features(${TARGET_NAME} PRIVATE cxx_std_17)`. More information is in the [official document](https://cmake.org/cmake/help/latest/manual/cmake-compile-features.7.html#id5)  
