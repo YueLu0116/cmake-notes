@@ -4,6 +4,9 @@
 [modern cmake introduction](https://cliutils.gitlab.io/modern-cmake/chapters/intro/running.html)  
 [bytetech blogs](https://tech.bytedance.net/articles/6887817085125623821)  
 [cmake examples in github](https://github.com/ttroy50/cmake-examples)
+
+[cmake wiki faq](https://gitlab.kitware.com/cmake/community/-/wikis/FAQ)
+
 ## Lesson 1 CMake hello world
 ### CMake最基本的三行代码
 1. 指定最小版本（or版本范围）  
@@ -104,17 +107,33 @@ make install
 
 `make install DESTDIR=/tmp/stage`
 
+## Lession 6 构建类型
+
+> 参考so[问题](https://stackoverflow.com/questions/7724569/debug-vs-release-in-cmake)，更推荐out of source build
+>
+> 另外一个[post](https://stackoverflow.com/questions/48754619/what-are-cmake-build-type-debug-release-relwithdebinfo-and-minsizerel)下回答了不同build types的含义，以及cmake默认是release build type
+
+例如要采用debug build
+
+```
+mkdir Release
+cd Release
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make
+```
+
 ## FAQ
 1. [Are CMAKE_SOURCE_DIR and PROJECT_SOURCE_DIR the same in CMake?
-  ](https://stackoverflow.com/questions/32028667/are-cmake-source-dir-and-project-source-dir-the-same-in-cmake)
+    ](https://stackoverflow.com/questions/32028667/are-cmake-source-dir-and-project-source-dir-the-same-in-cmake)
 
   >  CMAKE_SOURCE_DIR does indeed refer to the folder where the top-level CMakeLists.txt is defined. However, PROJECT_SOURCE_DIR refers to the folder of the CMakeLists.txt containing the most recent project() command.  
 
 2. [How to enable c++17 in cmake](https://stackoverflow.com/questions/45688522/how-to-enable-c17-in-cmake)  
    Use `target_compile_features(${TARGET_NAME} PRIVATE cxx_std_17)`. More information is in the [official document](https://cmake.org/cmake/help/latest/manual/cmake-compile-features.7.html#id5)  
 
-3. How to use cmakw tools in vscode?  
+3. How to use cmake tools in vscode?  
    On mac  
+   
    1. Open the Command Palette and run cmake:configure;
    2. Select the complier (clang);
    3. Build.  
