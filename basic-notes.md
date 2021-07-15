@@ -122,7 +122,18 @@ cmake -DCMAKE_BUILD_TYPE=Release ..
 make
 ```
 
+## Lession 7 编译器标志
+
+### 现代cmake定义编译器标志
+
+使用`target_compile_definitions(<TARGET_NAME> SCOPE <FLAGS_> )`来定义，通过scope来指定该标识的可见范围，如果是public和interface的，则可以通过链接关系在不同targets间传递下去。
+
+### make打印详细信息
+
+`make VERBOSE=1`
+
 ## FAQ
+
 1. [Are CMAKE_SOURCE_DIR and PROJECT_SOURCE_DIR the same in CMake?
     ](https://stackoverflow.com/questions/32028667/are-cmake-source-dir-and-project-source-dir-the-same-in-cmake)
 
