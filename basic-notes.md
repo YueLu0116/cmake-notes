@@ -7,6 +7,8 @@
 
 [cmake wiki faq](https://gitlab.kitware.com/cmake/community/-/wikis/FAQ)
 
+[effective modern cmake](https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1)
+
 ## Lesson 1 CMake hello world
 ### CMake最基本的三行代码
 1. 指定最小版本（or版本范围）  
