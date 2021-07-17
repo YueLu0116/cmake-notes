@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.10)
+project(third-party)
+find_package(CURL)
+if(CURL_FOUND)
+    message("curl found")
+else()
+    message("cannot find curl")
+endif()

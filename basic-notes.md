@@ -134,6 +134,67 @@ make
 
 `make VERBOSE=1`
 
+## Lesson 8 引入第三方库
+cmake提供了[find_package()](https://cmake.org/cmake/help/latest/command/find_package.html)函数来引入第三方库。有module模式与config模式。
+### module模式
+module模式下，cmake在搜索路径中寻找库对应的Find\<LibraryName\>.cmake文件。该文件为项目引入该库的头文件路径和库文件路径。  
+module模式下的搜索路径：首先去项目指定的`CMAKE_MODULE_PATH`中，该路径[初值为空](https://cmake.org/cmake/help/latest/variable/CMAKE_MODULE_PATH.html#variable:CMAKE_MODULE_PATH)，需要自己指定；然后去cmake内置的modules路径下（mac中，通过homebrew安装cmake，该路径为：`/usr/local/Cellar/cmake/3.19.4/share/cmake/Modules`)  
+关于FindLibraryName.cmake文件：例如motif库的该文件：
+```
+# Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
+# file Copyright.txt or https://cmake.org/licensing for details.
+
+#[=======================================================================[.rst:
+FindMotif
+---------
+
+Try to find Motif (or lesstif)
+
+Once done this will define:
+
+::
+
+  MOTIF_FOUND        - system has MOTIF
+  MOTIF_INCLUDE_DIR  - include paths to use Motif
+  MOTIF_LIBRARIES    - Link these to use Motif
+#]=======================================================================]
+
+set(MOTIF_FOUND 0)
+
+if(UNIX)
+  find_path(MOTIF_INCLUDE_DIR
+    Xm/Xm.h
+    /usr/openwin/include
+    )
+
+  find_library(MOTIF_LIBRARIES
+    Xm
+    /usr/openwin/lib
+    )
+
+endif()
+
+include(${CMAKE_CURRENT_LIST_DIR}/FindPackageHandleStandardArgs.cmake)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(Motif DEFAULT_MSG MOTIF_LIBRARIES MOTIF_INCLUDE_DIR)
+
+mark_as_advanced(
+  MOTIF_INCLUDE_DIR
+  MOTIF_LIBRARIES
+)
+```
+可以看出，该文件导出了一些变量：`MOTIF_FOUND`说明了该库有没有找到；`MOTIF_INCLUDE_DIR`和`MOTIF_LIBRARIES`说明了头文件和库文件的路径。  
+通过这些导出的变量，可以在cmake工程中为target添加/链接相关的文件。现代cmake下，部分modules支持导出alias targets，例如boost库导出的targets使用boost::为标识，还明确了依赖关系。仅通过：
+```
+# link against the boost libraries
+target_link_libraries( third_party_include
+    PRIVATE
+        Boost::filesystem
+)
+```
+即可链接到boost库的filesystem。  
+对于自己写的库，希望别的项目可以引用，则可以自己编写FindLN.cmake文件，然后通过上面的方式添加到其他项目中。
+### config模式
+如果module模式搜索失败，则cmake转入config模式进行搜索，找寻LibraryNameConfig.cmake和packagename-config.cmake文件。这些文件同样配置了头文件和库文件路径，提供变量给find_package()。一般非内置但是通过cmake编译安装的库会将配置文件拷贝到系统目录中。即对于使用者来说，先安装配置文件再使用cmake编译工程，此时find_package需要传入CONFIG参数。参考[回答](https://stackoverflow.com/a/20857070/11100389)。
 ## FAQ
 
 1. [Are CMAKE_SOURCE_DIR and PROJECT_SOURCE_DIR the same in CMake?
