@@ -196,13 +196,42 @@ target_link_libraries( third_party_include
 ### config模式
 如果module模式搜索失败，则cmake转入config模式进行搜索，找寻LibraryNameConfig.cmake和packagename-config.cmake文件。这些文件同样配置了头文件和库文件路径，提供变量给find_package()。一般非内置但是通过cmake编译安装的库会将配置文件拷贝到系统目录中。即对于使用者来说，先安装配置文件再使用cmake编译工程，此时find_package需要传入CONFIG参数。参考[回答](https://stackoverflow.com/a/20857070/11100389)。
 
-## Lesson 7 指定编译器
+## Lesson 9 指定编译器
 
 指定使用clang编译工程：
 
 `cmake .. -DCMAKE_C_COMPILER=clang-3.6 -DCMAKE_CXX_COMPILER=clang++-3.6`
 
 在mac上直接使用以上命令会提示找不到cxx_compiler，解决办法可参考[回答](https://stackoverflow.com/a/9702678/11100389)
+
+## Lesson 10 多个项目的工程
+
+### header only
+
+基本规则：
+
+```
+add_library(${PROJECT_NAME} INTERFACE)
+target_include_directories(${PROJECT_NAME} INTERFACE ${PROJECT_SOURCE_DIR}/include)
+```
+
+### 链接工程中的其他库
+
+```
+target_link_libraries(${PROJECT_NAME}
+    sub::lib1
+    sub::lib2
+)
+```
+
+### top-level的CMakeLists.txt
+
+需要添加子项目的目录：
+
+```
+add_subdirectory(sublibrary1)
+add_subdirectory(sublibrary2)
+```
 
 ## FAQ
 

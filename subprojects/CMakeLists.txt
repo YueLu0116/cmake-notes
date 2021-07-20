@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.10)
+project(multi-projects)
+add_subdirectory(header-only)
+add_subdirectory(static-lib)
+add_subdirectory(binary)
